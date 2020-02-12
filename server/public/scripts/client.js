@@ -2,6 +2,7 @@ $( document ).ready( onReady );
 
 function onReady(){
     $( '#addSongButton' ).on( 'click', addSong );
+    $('#songsOut').on('click', '.delete', deleteClick);
     getSongs();
 }
 
@@ -35,8 +36,38 @@ function getSongs(){
         url: '/songs'
     }).then( function( response ){
         console.log( 'back from GET with:', response );
+        displaySongs(response);
     }).catch( function( err ){
         console.log( err );
         alert( 'no worky' );
     }) // end ajax
 } // end getSongs
+
+function deleteClick() {
+    console.log('delete');
+    let selectedId = $(this).parent().data('id');
+    // make an ajax request to GET songs from server (from db)
+        $.ajax({
+            type: 'DELETE',
+            url: `/songs/${selectedId}`
+        }).then( function( response ){
+            console.log( 'back from GET with:', response );
+            getSongs();
+        }).catch( function( err ){
+            console.log( err );
+            alert( 'no worky' );
+        }) // end ajax
+}//end deleteclick
+
+function displaySongs(responseArray){
+    console.log('responseArray');
+    $('#songsOut').empty();
+    //loop through array
+    for(let i = 0; i < responseArray.length; i++){
+
+        $('#songsOut').append(`<li data-id="${responseArray[i].id}">${responseArray[i].rank} ${responseArray[i].artist}: ${responseArray[i].track} ${responseArray[i].published}
+        <button class="delete">DELETE</button>
+        </li>`);
+    }
+    //append to DOM
+}//end displaySongs
