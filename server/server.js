@@ -21,3 +21,17 @@ app.listen( port, ()=>{
     console.log( 'server up on:', port );
 }) //end server up
 // routes
+app.get( '/songs', ( req, res )=>{
+    console.log( 'in /songs GET' );
+    // set up a query 
+    let queryString = 'SELECT * FROM songs';
+    // try to run query on our pool
+    pool.query( queryString ).then( ( results )=>{
+        // if successful, we'll send response with rows from results
+        res.send( results.rows );
+    }).catch( ( err )=>{
+        // catch any errors
+        console.log( err );
+        res.sendStatus( 500 );
+    })
+}); //end /songs GET
