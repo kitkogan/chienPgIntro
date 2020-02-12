@@ -35,3 +35,8 @@ app.get( '/songs', ( req, res )=>{
         res.sendStatus( 500 );
     })
 }); //end /songs GET
+
+app.post( '/songs', ( req, res )=>{
+    console.log( 'in /songs POST:', req.body );
+    res.send( 'buzz' );
+}) //end /songs POST
